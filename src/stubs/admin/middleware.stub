@@ -1,0 +1,30 @@
+<?php
+
+namespace app\middleware;
+
+use app\presenter\format\ResponseFormat;
+use Webman\Http\Request;
+use Webman\Http\Response;
+use Webman\MiddlewareInterface;
+
+class IsAdminMiddleware implements MiddlewareInterface
+{
+    public function process(Request $request, callable $next): Response
+    {
+        $userGroup = $request->user?->user_group ?? null;
+
+        if (!$userGroup || $userGroup < 7) {
+            session()->flush();
+            $errorMsg = '權限不足, 請重新登入';
+            if ($request->isAjax()) {
+                return ResponseFormat::fail($errorMsg, 401);
+            }
+            session([
+                'error' => $errorMsg,
+            ]);
+            return redirect(route('loginPage', ['redirect' => $request->path()]));
+        }
+
+        return $next($request);
+    }
+}

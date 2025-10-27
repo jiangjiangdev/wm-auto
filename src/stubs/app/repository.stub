@@ -1,0 +1,85 @@
+<?php
+
+namespace app\repository;
+
+use app\model\{{modelName}};
+
+class {{modelName}}Repository
+{
+    public function get(array $conditions = [], array $orderBy = [], array $withs = [], int $pageAmount = 0)
+    {
+        $query = {{modelName}}::query();
+        $query->where('deleted_at', null);
+        if ($withs) {
+            $query->with($withs);
+        }
+        foreach ($conditions as $field => $value) {
+            // 檢查是否值是一個範圍（即數組），並且特別處理
+            if (is_array($value)) {
+                for ($i = 0; $i < count($value); $i++) {
+                    $query->where($field, ...$value[$i]);
+                }
+            } else {
+                $query->where($field, $value);
+            }
+        }
+        foreach ($orderBy as $field => $value) {
+            $query->orderBy($field, $value);
+        }
+
+        if ($pageAmount > 0) {
+            return $query->paginate($pageAmount);
+        }
+
+        return $query->get();
+    }
+
+    public function find($conditions = [], $withs = []): {{modelName}} | null
+    {
+        $query = {{modelName}}::query();
+        if ($withs) {
+            $query->with($withs);
+        }
+        $query->where('deleted_at', null);
+        foreach ($conditions as $field => $value) {
+            // 檢查是否值是一個範圍（即數組），並且特別處理
+            if (is_array($value)) {
+                for ($i = 0; $i < count($value); $i++) {
+                    $query->where($field, ...$value[$i]);
+                }
+            } else {
+                $query->where($field, $value);
+            }
+        }
+        $data = $query->first();
+        return $data;
+    }
+
+    public function create(array $data)
+    {
+        return {{modelName}}::create($data);
+    }
+
+    public function update($data, array $conditions = [])
+    {
+        $query = {{modelName}}::query();
+        foreach ($conditions as $field => $value) {
+            // 檢查是否值是一個範圍（即數組），並且特別處理
+            if (is_array($value)) {
+                for ($i = 0; $i < count($value); $i++) {
+                    $query->where($field, ...$value[$i]);
+                }
+            } else {
+                $query->where($field, $value);
+            }
+        }
+        $query->update($data);
+    }
+
+    public function delete($id)
+    {
+        return {{modelName}}::where('id', $id)->update([
+            'deleted_at' => date('Y-m-d H:i:s'),
+        ]);
+    }
+}

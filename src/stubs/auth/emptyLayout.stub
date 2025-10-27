@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="charset=utf-8">
+    <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=5.0, minimum-scale=1.0, viewport-fit=cover">
+    <title>@yield('title', env('APP_NAME'))</title>
+    <meta name="description" content="@yield('description', env('APP_NAME'))">
+    <link rel="stylesheet" href="{{ mix('/css/app.css') }}">
+</head>
+
+<body class="flex items-center justify-center bg-gray-200" style="display: none;">
+    @yield('content')
+    <script>
+        function resize() {
+            document.body.style.display = 'flex';
+            const screenHeight = window.innerHeight;
+            document.body.style.height = screenHeight + 'px';
+        }
+        window.addEventListener('resize', resize);
+        window.addEventListener('load', resize);
+    </script>
+    @yield('script')
+</body>
+
+</html>

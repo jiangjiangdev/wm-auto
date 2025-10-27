@@ -1,0 +1,76 @@
+<?php
+
+namespace app\repository;
+
+use app\model\User;
+
+class UserRepository
+{
+    public function get(array $conditions = [], array $orderBy = [], array $withs = [], int $pageAmount = 0)
+    {
+        $query = User::query();
+        $query->where('deleted_at', null);
+        if ($withs) {
+            $query->with($withs);
+        }
+        foreach ($conditions as $field => $value) {
+            if (is_array($value)) {
+                $query->where($field, ...$value);
+            } else {
+                $query->where($field, $value);
+            }
+        }
+        foreach ($orderBy as $field => $value) {
+            $query->orderBy($field, $value);
+        }
+
+        if ($pageAmount > 0) {
+            return $query->paginate($pageAmount);
+        }
+
+        return $query->get();
+    }
+
+    public function find($conditions = [], $withs = []): User | null
+    {
+        $query = User::query();
+        if ($withs) {
+            $query->with($withs);
+        }
+        $query->where('deleted_at', null);
+        foreach ($conditions as $field => $value) {
+            if (is_array($value)) {
+                $query->where($field, ...$value);
+            } else {
+                $query->where($field, $value);
+            }
+        }
+        $data = $query->first();
+        return $data;
+    }
+
+    public function create(array $data)
+    {
+        return User::create($data);
+    }
+
+    public function update($data, array $conditions = [])
+    {
+        $query = User::query();
+        foreach ($conditions as $field => $value) {
+            if (is_array($value)) {
+                $query->where($field, ...$value);
+            } else {
+                $query->where($field, $value);
+            }
+        }
+        $query->update($data);
+    }
+
+    public function delete($id)
+    {
+        return User::where('id', $id)->update([
+            'deleted_at' => date('Y-m-d H:i:s'),
+        ]);
+    }
+}

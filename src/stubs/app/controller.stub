@@ -1,0 +1,45 @@
+<?php
+
+namespace app\controller;
+
+use app\repository\{{modelName}}Repository;
+use support\Request;
+
+class {{modelName}}Controller
+{
+    protected ${{modelNameLower}}Repository;
+
+    function __construct({{modelName}}Repository ${{modelNameLower}}Repository)
+    {
+        $this->{{modelNameLower}}Repository = ${{modelNameLower}}Repository;
+    }
+
+    public function index()
+    {
+        return json($this->{{modelNameLower}}Repository->get());
+    }
+
+    public function show($id)
+    {
+        return $this->{{modelNameLower}}Repository->find(conditions: [
+            'id' => $id,
+        ]);
+    }
+
+    public function store(Request $request)
+    {
+        return $this->{{modelNameLower}}Repository->create($request->all());
+    }
+
+    public function update(Request $request, $id)
+    {
+        return $this->{{modelNameLower}}Repository->update(data: $request->all(), conditions: [
+            'id' => $id,
+        ]);
+    }
+
+    public function destroy($id)
+    {
+        return $this->{{modelNameLower}}Repository->delete($id);
+    }
+}

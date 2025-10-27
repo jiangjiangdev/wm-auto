@@ -1,0 +1,7 @@
+<?php
+
+return [
+    'locale' => 'en',
+    'fallback_locale' => ['en', 'zh-TW'],
+    'path' => base_path() . '/resource/translations',
+];

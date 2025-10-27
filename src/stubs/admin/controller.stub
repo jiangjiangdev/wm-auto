@@ -1,0 +1,13 @@
+<?php
+
+namespace app\controller\admin;
+
+use support\Request;
+
+class IndexController
+{
+    public function index()
+    {
+        return view('page/admin/index');
+    }
+}

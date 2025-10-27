@@ -1,0 +1,21 @@
+import { defineConfig } from 'vite';
+import { svelte } from "@sveltejs/vite-plugin-svelte";
+import laravel from 'laravel-vite-plugin';
+
+export default defineConfig({
+    publicDir: false,
+    build: {
+        rollupOptions: {
+            input: {
+                main: './resource/js/app.js'
+            }
+        },
+        outDir: './public/client'
+    },
+    plugins: [
+        laravel([
+            'resource/js/app.js',
+        ]),
+        svelte(),
+    ],
+});

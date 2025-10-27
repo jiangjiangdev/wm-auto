@@ -1,0 +1,7 @@
+@extends('layout.admin')
+
+@section('header', 'header')
+
+@section('content')
+    <div>index</div>
+@endsection

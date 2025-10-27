@@ -1,0 +1,50 @@
+<?php
+
+use Webman\Session\RedisSessionHandler;
+
+return [
+
+    'type' => env('SESSION_DRIVER', 'redis'),
+
+    'handler' => RedisSessionHandler::class,
+
+    'config' => [
+        'file' => [
+            'save_path' => runtime_path() . '/sessions',
+        ],
+        'redis' => [
+            'host' => env('REDIS_HOST'),
+            'port' => +env('REDIS_PORT', 6379),
+            'auth' => env('REDIS_PASSWORD'),
+            'timeout' => 2,
+            'database' => env('SESSION_REDIS_DATABASE_INDEX', 0),
+            'prefix' => env('SESSION_REDIS_PREFIX', 'redis_session_'),
+        ],
+        'redis_cluster' => [
+            'host' => ['127.0.0.1:7000', '127.0.0.1:7001', '127.0.0.1:7001'],
+            'timeout' => 2,
+            'auth' => '',
+            'prefix' => 'redis_session_',
+        ],
+    ],
+
+    'session_name' => 'PHPSID',
+
+    'auto_update_timestamp' => false,
+
+    'lifetime' => 6 * 60 * 60,
+
+    'cookie_lifetime' => 365 * 24 * 60 * 60,
+
+    'cookie_path' => '/',
+
+    'domain' => '',
+
+    'http_only' => true,
+
+    'secure' => false,
+
+    'same_site' => '',
+
+    'gc_probability' => [1, 1000],
+];

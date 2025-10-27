@@ -1,0 +1,57 @@
+<?php
+
+declare (strict_types = 1);
+
+use Phinx\Db\Adapter\MysqlAdapter;
+use Phinx\Migration\AbstractMigration;
+
+final class CreateUserTable extends AbstractMigration
+{
+    public function change(): void
+    {
+        $table = $this->table('users', [
+            'id' => true,
+            'encoding' => 'utf8mb4',
+            'collation' => 'utf8mb4_0900_ai_ci',
+        ]);
+
+        $table->addColumn('name', 'string', [
+            'limit' => 20,
+            'null' => false,
+            'comment' => 'Name',
+        ])->addColumn('user_status', 'integer', [
+            'signed' => false,
+            'null' => false,
+            'default' => 1,
+            'limit' => MysqlAdapter::INT_TINY,
+            'comment' => '0:close 1:normal',
+        ])->addColumn('user_group', 'integer', [
+            'signed' => false,
+            'null' => false,
+            'default' => 1,
+            'limit' => MysqlAdapter::INT_TINY,
+            'comment' => '0:x 1:normal 9:admin',
+        ])->addColumn('username', 'string', [
+            'limit' => 20,
+            'null' => false,
+            'comment' => 'Username',
+        ])->addColumn('password', 'string', [
+            'limit' => 64,
+            'null' => false,
+            'comment' => 'Password',
+        ])->addColumn('auth_token', 'string', [
+            'limit' => 64,
+            'null' => false,
+            'comment' => 'Token',
+        ])->addColumn('updated_at', 'datetime', [
+            'null' => false,
+            'comment' => 'Update At',
+        ])->addColumn('created_at', 'datetime', [
+            'null' => false,
+            'comment' => 'Created At',
+        ])->addColumn('deleted_at', 'datetime', [
+            'null' => true,
+            'comment' => 'Deleted At',
+        ])->changeComment('User table')->create();
+    }
+}

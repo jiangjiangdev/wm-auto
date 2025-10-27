@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html translate="no" class="notranslate">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="charset=utf-8">
+    <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=5.0, minimum-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="{{ env('APP_DESCRIPTION') }}">
+    <meta name="google" content="notranslate">
+    {{-- 避免被 Google 收錄 --}}
+    <meta name="robots" content="noindex">
+    <title>@yield('title', env('APP_NAME'))</title>
+    <link rel="stylesheet" href="{{ mix('/css/app.css') }}">
+    @yield('head')
+</head>
+
+<body class="flex">
+    <div class="w-full h-dvh max-w-[90px]">
+        @include('layout.adminNavbar')
+    </div>
+    <div class="w-full flex flex-col">
+        <div
+            class="py-3 md:py-5 px-4 md:px-6 w-full bg-base-300 shadow-md tracking-widest flex items-center sticky top-0 z-20">
+            @yield('header')
+        </div>
+        @yield('content')
+    </div>
+    <div id="loadingBlock" class="hidden w-full h-full fixed z-50 bg-base-300/80 items-center justify-center">
+        <span class="loading loading-dots loading-lg text-warning"></span>
+    </div>
+    @include('layout.adminScript')
+    @yield('script')
+</body>
+
+</html>

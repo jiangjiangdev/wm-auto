@@ -1,0 +1,18 @@
+<?php
+
+return [
+    'default' => [
+        'host' => env('REDIS_HOST', '127.0.0.1'),
+        'password' => env('REDIS_PASSWORD'),
+        'port' => +env('REDIS_PORT', 6379),
+        'database' => env('REDIS_DATABASE_INDEX', 0),
+        'prefix' => env('REDIS_PREFIX', 'redis_prefix_'),
+        'pool'     => [
+            'max_connections'    => 10,
+            'min_connections'    => 1,
+            'wait_timeout'       => 3,
+            'idle_timeout'       => 50,
+            'heartbeat_interval' => 55,
+        ],
+    ],
+];

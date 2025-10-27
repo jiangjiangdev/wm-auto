@@ -1,0 +1,34 @@
+<script>
+    // 監聽 form submit 事件, (method 屬性值不是 dialog), 與 a 標籤 click 事件
+    document.querySelectorAll('form').forEach(function(form) {
+        if (form.getAttribute('method') == 'dialog') {
+            return;
+        }
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            loadingBlock(true);
+            form.submit();
+        });
+    });
+
+    // 監聽 a 標籤 click 事件
+    document.querySelectorAll('a').forEach(function(a) {
+        a.addEventListener('click', function(event) {
+            if (a.getAttribute('href') == '#') {
+                event.preventDefault();
+                return;
+            }
+            loadingBlock(true);
+        });
+    });
+
+    function loadingBlock(enable) {
+        if (enable) {
+            document.getElementById('loadingBlock').classList.remove('hidden');
+            document.getElementById('loadingBlock').classList.add('flex');
+        } else {
+            document.getElementById('loadingBlock').classList.remove('flex');
+            document.getElementById('loadingBlock').classList.add('hidden');
+        }
+    }
+</script>

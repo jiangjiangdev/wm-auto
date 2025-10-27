@@ -1,0 +1,39 @@
+<?php
+
+declare (strict_types = 1);
+
+use Phinx\Db\Adapter\MysqlAdapter;
+use Phinx\Migration\AbstractMigration;
+
+final class Create{{modelName}}Table extends AbstractMigration
+{
+    public function change(): void
+    {
+        $table = $this->table('{{tableNames}}', [
+            'id' => true,
+            'encoding' => 'utf8mb4',
+            'collation' => 'utf8mb4_0900_ai_ci',
+        ]);
+
+        $table->addColumn('name', 'string', [
+            'limit' => 31,
+            'null' => false,
+            'comment' => 'Name',
+        ])->addColumn('{{tableName}}_status', 'integer', [
+            'signed' => false,
+            'null' => false,
+            'default' => 1,
+            'limit' => MysqlAdapter::INT_TINY,
+            'comment' => '0:close 1:normal',
+        ])->addColumn('updated_at', 'datetime', [
+            'null' => false,
+            'comment' => 'Update At',
+        ])->addColumn('created_at', 'datetime', [
+            'null' => false,
+            'comment' => 'Created At',
+        ])->addColumn('deleted_at', 'datetime', [
+            'null' => true,
+            'comment' => 'Deleted At',
+        ])->changeComment('{{tableName}}')->create();
+    }
+}

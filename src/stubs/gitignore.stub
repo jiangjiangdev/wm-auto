@@ -1,0 +1,17 @@
+/runtime
+/.idea
+/.vscode
+/vendor
+*.log
+.env
+/tests/tmp
+/tests/.phpunit.result.cache
+/node_modules
+/public/version.txt
+/public/css/app.css
+/public/css/pay.css
+/public/img*
+.DS_Store
+dbSSLCA.crt
+*.rdb
+*.pem

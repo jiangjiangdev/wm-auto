@@ -1,0 +1,100 @@
+<?php
+
+namespace app\controller;
+
+use app\validation\LoginPostValidation;
+use app\repository\UserRepository;
+use support\Cache;
+use support\Request;
+use support\Response;
+
+class AuthController
+{
+    protected $userRepository;
+
+    protected $loginPostValidation;
+
+    function __construct(UserRepository $userRepository, LoginPostValidation $loginPostValidation)
+    {
+        $this->userRepository = $userRepository;
+        $this->loginPostValidation = $loginPostValidation;
+    }
+
+    public function loginPage(): Response
+    {
+        // 先移除 auth_token 在 Cache 中的資料
+        $authToken = session('auth_token');
+        Cache::delete("userDatas_{$authToken}");
+        session()->forget('auth_token');
+
+        return view('page/auth/login');
+    }
+
+    public function login(Request $request): Response
+    {
+        // 驗證輸入
+        if (!$this->loginPostValidation->check($request->all())) {
+            session([
+                'error' => $this->loginPostValidation->getError(),
+            ]);
+            return redirect(route('loginPage'));
+        }
+
+        // 如果資料庫沒有用戶的話, 直接創建一個管理員
+        $user = $this->userRepository->find();
+
+        if (!$user) {
+            $this->userRepository->create([
+                'name' => 'Admin',
+                'username' => $request->input('username'),
+                'password' => password_hash($request->input('password'), PASSWORD_BCRYPT),
+                'user_group' => 9,
+                'auth_token' => 'x',
+            ]);
+        }
+
+        // 進行帳號密碼驗證
+        $user = $this->authByUsernameAndPassword($request->input('username'), $request->input('password'));
+
+        if (!$user) {
+            return redirect(route('loginPage'));
+        }
+
+        if ($request->input('redirect')) {
+            return redirect($request->input('redirect'));
+        }
+
+        return redirect('/admin');
+    }
+
+    private function authByUsernameAndPassword(string $username, string $password)
+    {
+        $user = $this->userRepository->find(conditions: ['username' => $username]);
+        if (!$user or !password_verify($password, $user->password)) {
+            session([
+                'error' => '帳號或密碼錯誤',
+            ]);
+            return null;
+        }
+
+        // 移除舊的 auth_token 在 Cache 中的資料
+        $oldAuthToken = $user->auth_token;
+        Cache::delete("userDatas_{$oldAuthToken}");
+
+        // 產生 auth_token, 存入資料庫
+        $authToken = hash('sha256', $user->id . microtime(true));
+        $user->auth_token = $authToken;
+        $user->save();
+
+        // 將 user 存入 Cache, 時間為 1 小時
+        Cache::set("userDatas_{$authToken}", $user, 3600);
+
+        // 將 auth_token 存入 session
+        session([
+            'auth_token' => $authToken,
+            'user_group' => $user->user_group,
+        ]);
+
+        return $user;
+    }
+}

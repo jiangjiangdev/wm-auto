@@ -1,0 +1,26 @@
+<?php
+
+namespace app\presenter\format;
+
+use support\Response;
+
+class ResponseFormat
+{
+    public static function success($datas = [], int $code = 200)
+    {
+        return new Response($code, ['Content-Type' => 'application/json'], json_encode([
+            'success' => true,
+            'code' => $code,
+            'data' => $datas,
+        ]));
+    }
+
+    public static function fail(string $message, int $code = 400)
+    {
+        return new Response($code, ['Content-Type' => 'application/json'], json_encode([
+            'success' => false,
+            'code' => $code,
+            'message' => $message,
+        ]));
+    }
+}
