@@ -146,6 +146,36 @@ class ContentResetCommand extends Command
         $targetFolderPath = base_path() . "/.gitignore";
         $this->checkAndCreateFile($targetFolderPath, $stubContent, true);
 
+        // .bs-config.cjs
+        $stubContent = file_get_contents(self::STUB_PATH . 'bs-config.stub');
+        $targetFolderPath = base_path() . "/.bs-config.cjs";
+        $this->checkAndCreateFile($targetFolderPath, $stubContent, true);
+
+        // tailwind.config.cjs
+        $stubContent = file_get_contents(self::STUB_PATH . 'tailwind.config.stub');
+        $targetFolderPath = base_path() . "/tailwind.config.cjs";
+        $this->checkAndCreateFile($targetFolderPath, $stubContent, true);
+
+        // generate-version.cjs
+        $stubContent = file_get_contents(self::STUB_PATH . 'generate-version.stub');
+        $targetFolderPath = base_path() . "/generate-version.cjs";
+        $this->checkAndCreateFile($targetFolderPath, $stubContent, true);
+
+        // package.json
+        $stubContent = file_get_contents(self::STUB_PATH . 'package.stub');
+        $targetFolderPath = base_path() . "/package.json";
+        $this->checkAndCreateFile($targetFolderPath, $stubContent, true);
+
+        // resource/css/app.css
+        $stubContent = file_get_contents(self::STUB_PATH . 'resource/css/app.stub');
+        $targetFolderPath = base_path() . "/resource/css/app.css";
+        $this->checkAndCreateFile($targetFolderPath, $stubContent, true);
+
+        // public/version.txt
+        $stubContent = file_get_contents(self::STUB_PATH . 'public/version.stub');
+        $targetFolderPath = base_path() . "/public/version.txt";
+        $this->checkAndCreateFile($targetFolderPath, $stubContent, true);
+
         // phinx.php
         $stubContent = file_get_contents(self::STUB_PATH . 'phinx.stub');
         $targetFolderPath = base_path() . "/phinx.php";

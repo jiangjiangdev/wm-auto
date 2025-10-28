@@ -1,0 +1,10 @@
+module.exports = {
+    proxy: 'http://127.0.0.1:8787',   // Webman 預設 http_port
+    port: 3000,                       // 你要看的 dev 站台 port
+    files: [
+        'public/css/*.css',
+        'app/view/**/*.php',
+    ],
+    reloadDelay: 100,
+    open: false
+};

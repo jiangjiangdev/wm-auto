@@ -1,0 +1,17 @@
+{
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"npm:css\" \"npm:bs\"",
+    "css": "BROWSERSLIST_IGNORE_OLD_DATA=true tailwindcss -i ./resource/css/app.css -o ./public/css/app.css --watch",
+    "bs": "NODE_OPTIONS=--no-deprecation browser-sync start --config bs-config.cjs",
+    "build": "tailwindcss -i ./resource/css/app.css -o ./public/css/app.css --minify && node generate-version.cjs"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "browser-sync": "^3.0.4",
+    "concurrently": "^9.2.1",
+    "daisyui": "^4.12.24",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.16"
+  }
+}
